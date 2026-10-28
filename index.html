@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Редактор систем — POM Studio</title>
+  <link rel="stylesheet" href="css/editor.css">
+</head>
+<body>
+  <div class="ed-app">
+    <!-- Верхняя панель -->
+    <header class="ed-topbar">
+      <div class="ed-brand">
+        <div class="ed-brand-mark">⚒</div>
+        <div class="ed-brand-text">
+          <div class="ed-brand-title">РЕДАКТОР СИСТЕМ</div>
+          <div class="ed-brand-sub">POM Studio · каркас</div>
+        </div>
+      </div>
+      <div class="ed-project">
+        <div class="ed-project-line">
+          <span id="ed-project-title">Новая система</span>
+          <span id="ed-dirty" class="ed-dirty hidden">●</span>
+        </div>
+        <div class="ed-project-path" id="ed-project-path">папка проекта не выбрана</div>
+      </div>
+      <div class="ed-top-actions">
+        <button id="ed-btn-inspector" class="ed-btn ed-inspector-toggle" type="button" aria-pressed="false">Свойства</button>
+        <button id="ed-btn-new" class="ed-btn">Новый</button>
+        <button id="ed-btn-open" class="ed-btn">Открыть папку</button>
+        <button id="ed-btn-save" class="ed-btn">Сохранить</button>
+        <button id="ed-btn-export" class="ed-btn">Экспорт</button>
+        <button id="ed-btn-preview" class="ed-btn ed-btn-accent">Предпросмотр</button>
+      </div>
+    </header>
+
+    <!-- Тело -->
+    <div class="ed-body">
+      <!-- Навигация -->
+      <nav class="ed-nav" aria-label="Разделы редактора">
+        <div class="ed-nav-label">Разделы</div>
+        <div id="ed-nav-list" class="ed-nav-list"></div>
+      </nav>
+
+      <!-- Основная область -->
+      <main class="ed-main">
+        <div class="ed-main-head">
+          <div class="ed-main-titles">
+            <h1 id="ed-section-title">Обзор</h1>
+            <p id="ed-section-sub">Состояние проекта и следующие шаги</p>
+          </div>
+          <div id="ed-section-actions" class="ed-section-actions"></div>
+        </div>
+        <div id="ed-workspace" class="ed-workspace"></div>
+      </main>
+
+      <!-- Инспектор -->
+      <aside class="ed-inspector" aria-label="Свойства">
+        <div class="ed-inspector-head">
+          <span>Свойства</span>
+          <button id="ed-inspector-close" class="ed-icon-btn insp-close" type="button" title="Закрыть свойства" aria-label="Закрыть свойства">✕</button>
+        </div>
+        <div id="ed-inspector-body" class="ed-inspector-body"></div>
+      </aside>
+    </div>
+
+    <!-- Статус -->
+    <footer class="ed-status">
+      <span id="ed-status-left">Каркас · изменения не сохраняются</span>
+      <span id="ed-status-right">views: 0 · проблем: 0</span>
+    </footer>
+  </div>
+
+  <!-- Уведомления -->
+  <div id="ed-toast" class="ed-toast" role="status" aria-live="polite"></div>
+
+  <!-- Скрипты -->
+  <script src="vendor/xlsx/xlsx.full.min.js"></script>
+  <script src="js/project.js"></script>
+  <script src="js/validate.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/preview.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

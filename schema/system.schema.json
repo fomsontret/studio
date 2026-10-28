@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pom.local/studio/schema/system.schema.json",
+  "title": "Модуль POM (system.json)",
+  "description": "Формат pom-system, formatVersion 1. Схема проверяет структуру, но не заменяет POM_EDITOR.validateProject: смысловые ссылки, пересечения и миграции проверяет редактор.",
+  "type": "object",
+  "required": ["format", "formatVersion", "id", "title", "version", "panel"],
+  "properties": {
+    "format": { "const": "pom-system" },
+    "formatVersion": { "type": "integer", "minimum": 1, "maximum": 1 },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+([-+].*)?$"
+    },
+    "description": { "type": "string" },
+    "panel": { "$ref": "#/$defs/panel" },
+    "sheets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sheet" }
+    },
+    "libraries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/library" }
+    },
+    "macros": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/macro" }
+    },
+    "assets": {
+      "description": "Оставлено для совместимости со старыми модулями. Редактор больше не создаёт папку assets/.",
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "geometry": {
+      "type": "object",
+      "required": ["x", "y", "w", "h"],
+      "properties": {
+        "x": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "y": { "type": "integer", "minimum": 1 },
+        "w": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "h": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": true
+    },
+    "component": {
+      "type": "object",
+      "required": ["id", "type", "x", "y", "w", "h"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": {
+          "enum": ["label", "text", "number", "textarea", "select", "library",
+            "checkbox", "button", "divider", "spacer", "image"]
+        },
+        "x": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "y": { "type": "integer", "minimum": 1 },
+        "w": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "h": { "type": "integer", "minimum": 1 },
+        "text": { "type": "string" },
+        "label": { "type": "string" },
+        "placeholder": { "type": "string" },
+        "value": { "type": ["string", "number", "boolean", "null"] },
+        "options": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rows": { "type": "integer", "minimum": 1 },
+        "libraryId": { "type": "string" },
+        "itemId": { "type": "string" },
+        "style": { "type": "string" },
+        "src": { "type": "string" },
+        "alt": { "type": "string" },
+        "locked": { "type": "boolean" },
+        "hidden": { "type": "boolean" },
+        "gmOnly": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "section": {
+      "type": "object",
+      "required": ["id", "items"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string" },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/component" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "view": {
+      "type": "object",
+      "required": ["id", "sections"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string" },
+        "icon": { "type": "string" },
+        "sections": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/section" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "panel": {
+      "type": "object",
+      "required": ["views"],
+      "properties": {
+        "views": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/view" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "sheet": {
+      "type": "object",
+      "required": ["id", "tabs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string" },
+        "icon": { "type": "string" },
+        "window": {
+          "type": "object",
+          "properties": {
+            "width": { "type": "number", "minimum": 1 },
+            "height": { "type": "number", "minimum": 1 }
+          },
+          "additionalProperties": true
+        },
+        "tabs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/view" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "libraryField": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" },
+        "type": { "enum": ["text", "number", "textarea", "checkbox", "select"] },
+        "unit": { "type": "string" },
+        "required": { "type": "boolean" },
+        "defaultValue": { "type": ["string", "number", "boolean", "null"] },
+        "options": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "libraryItem": {
+      "type": "object",
+      "required": ["id", "values"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string" },
+        "values": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "number", "boolean", "null"] }
+        }
+      },
+      "additionalProperties": true
+    },
+    "library": {
+      "type": "object",
+      "required": ["id", "fields", "items"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string" },
+        "icon": { "type": "string" },
+        "category": { "type": "string" },
+        "fields": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/libraryField" }
+        },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/libraryItem" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "macroStep": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["ask", "roll", "set", "add", "setText", "if", "log"] },
+        "title": { "type": "string" },
+        "label": { "type": "string" },
+        "key": { "type": "string" },
+        "input": { "type": "string" },
+        "formula": { "type": "string" },
+        "targetId": { "type": "string" },
+        "value": { "type": ["string", "number", "boolean", "null"] },
+        "condition": { "type": "string" },
+        "text": { "type": "string" },
+        "then": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/macroStep" }
+        },
+        "else": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/macroStep" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "macro": {
+      "type": "object",
+      "required": ["id", "surface", "steps"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string" },
+        "surface": { "enum": ["panel", "sheet"] },
+        "sheetId": { "type": ["string", "null"] },
+        "tabId": { "type": ["string", "null"] },
+        "itemId": { "type": ["string", "null"] },
+        "trigger": { "enum": ["click", "change", "load"] },
+        "steps": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/macroStep" }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
